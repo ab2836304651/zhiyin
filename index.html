@@ -4,22 +4,22 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#f7f8fb" />
-    <meta name="description" content="随行心理师：轻量级多智能体心理支持架构评审原型" />
-    <title>随行心理师 · 轻量级多智能体支持</title>
+    <meta name="description" content="Zhiyin：开放心理智能体实验室" />
+    <title>Zhiyin · 开放心理智能体实验室</title>
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
     <div class="app-shell">
       <aside class="sidebar" id="sidebar">
         <div class="brand">
-          <div class="brand-mark" aria-hidden="true">澄</div>
+          <div class="brand-mark" aria-hidden="true">知</div>
           <div>
-            <strong>随行心理师</strong>
-            <span>轻量级多智能体支持</span>
+            <strong>Zhiyin</strong>
+            <span>开放心理智能体实验室</span>
           </div>
         </div>
 
-        <div class="sidebar-label">工作台</div>
+        <div class="sidebar-label">探索空间</div>
         <nav class="main-nav" aria-label="主导航">
           <button class="nav-item active" data-view="home">
             <span class="nav-icon">⌂</span><span>今日概览</span>
@@ -38,11 +38,13 @@
           </button>
         </nav>
 
-        <div class="sidebar-label sidebar-label-spaced">专业支持</div>
+        <div class="sidebar-label sidebar-label-spaced">实验空间</div>
         <nav class="main-nav">
-          <button class="nav-item" data-view="supervision">
-            <span class="nav-icon">▣</span><span>教师督导</span>
-            <span class="risk-dot" aria-label="有待处理事项"></span>
+          <button class="nav-item" data-view="explore">
+            <span class="nav-icon">⌘</span><span>流派探索</span>
+          </button>
+          <button class="nav-item" data-view="architecture">
+            <span class="nav-icon">▣</span><span>架构总览</span>
           </button>
           <button class="nav-item" data-view="settings">
             <span class="nav-icon">⚙</span><span>系统设置</span>
@@ -74,12 +76,12 @@
         <header class="topbar">
           <div class="topbar-left">
             <button class="mobile-menu" id="mobileMenu" aria-label="打开菜单">☰</button>
-            <div class="breadcrumb"><span>工作台</span><b>/</b><strong id="currentViewName">今日概览</strong></div>
+            <div class="breadcrumb"><span>探索空间</span><b>/</b><strong id="currentViewName">今日概览</strong></div>
           </div>
           <div class="topbar-actions">
-            <div class="role-switch" aria-label="角色切换">
-              <button class="role-button active" data-role="user">用户端</button>
-              <button class="role-button" data-role="teacher">教师端</button>
+            <div class="role-switch" aria-label="视图切换">
+              <button class="role-button active" data-role="user">使用端</button>
+              <button class="role-button" data-role="architecture">架构总览</button>
             </div>
             <button class="icon-button notification-button" aria-label="通知">♧<span></span></button>
             <div class="avatar avatar-blue">林</div>
@@ -184,7 +186,7 @@
                   <button class="text-button full text-left" data-view-target="chat">和我聊聊这个变化 <span>→</span></button>
                 </div>
                 <div class="side-card support-card">
-                  <div class="support-avatar">师</div><div><div class="card-kicker">你的心理老师</div><strong>周老师</strong><p>本周四 15:00 · 已预约</p></div><button class="round-arrow light">↗</button>
+                  <div class="support-avatar">知</div><div><div class="card-kicker">开放实验</div><strong>选择一个工作视角</strong><p>从现实经历开始，而不是从理论标签开始</p></div><button class="round-arrow light" data-view-target="explore">↗</button>
                 </div>
               </aside>
             </div>
@@ -195,16 +197,16 @@
             <div class="chat-layout">
               <div class="chat-main panel">
                 <div class="chat-header">
-                  <div class="chat-person"><div class="avatar avatar-agent">随</div><div><strong>随行心理师</strong><span><i></i>在线 · 多智能体协作中</span></div></div>
+                  <div class="chat-person"><div class="avatar avatar-agent">知</div><div><strong>Zhiyin</strong><span><i></i>在线 · 多智能体协作中</span></div></div>
                   <div class="chat-header-actions"><span class="encrypted">⌑ 隐私对话</span><button class="icon-button">•••</button></div>
                 </div>
                 <div class="chat-body" id="chatBody">
                   <div class="chat-day"><span>今天 09:42</span></div>
-                  <div class="message assistant"><div class="message-avatar">随</div><div class="message-content"><p>早上好，林同学。今天感觉怎么样？如果有一件事最近比较占用你的注意力，可以从它开始。</p><div class="message-meta">已接收 · 不写入长期记忆</div></div></div>
+                  <div class="message assistant"><div class="message-avatar">知</div><div class="message-content"><p>早上好。今天感觉怎么样？如果有一件事最近比较占用你的注意力，可以从它开始。</p><div class="message-meta">已接收 · 不写入长期记忆</div></div></div>
                 </div>
                 <div class="chat-suggestions" id="chatSuggestions"><button data-prompt="我最近总是睡不着，脑子里停不下来。">睡不着怎么办？</button><button data-prompt="我想梳理一段关系。">帮我梳理关系</button><button data-prompt="给我一个三分钟练习。">三分钟放松练习</button></div>
                 <form class="composer" id="messageForm"><button type="button" class="composer-icon" aria-label="添加附件">＋</button><input id="messageInput" autocomplete="off" placeholder="说说此刻的感受……" /><button type="button" class="composer-icon" aria-label="语音输入">◉</button><button class="send-button" type="submit" aria-label="发送">↑</button></form>
-                <div class="composer-note">随行心理师不会替代专业诊断或治疗 · 重要内容请与心理老师沟通</div>
+                <div class="composer-note">Zhiyin 不替代专业诊断或治疗 · 重要问题请寻找现实中的专业支持</div>
               </div>
               <aside class="chat-side">
                 <div class="chat-side-card active-case"><div class="card-kicker">当前探索</div><h3>改善睡眠质量</h3><p>最近 7 天 · 4 条相关记录</p><div class="case-progress"><span style="width:68%"></span></div><div class="progress-meta"><span>进展 68%</span><button class="link-button">详情 <span>→</span></button></div></div>
@@ -213,6 +215,20 @@
                 <div class="chat-side-card subtle"><div class="card-kicker">记忆设置</div><p>本次对话仅用于当前会话。你可以在消息下方选择是否记住重要内容。</p><button class="outline-button full" id="openMemory">管理记忆 <span>→</span></button></div>
               </aside>
             </div>
+          </section>
+
+          <!-- Explore -->
+          <section class="view" data-view-panel="explore">
+            <div class="page-heading"><div><div class="eyebrow">Agent Lab · 工作视角选择</div><h1>先选一种理解方式，再开始探索</h1><p>这些不是完整理论或治疗流派，而是帮助 Agent 组织问题的不同工作视角。你可以随时切换，不把任何一种视角当成唯一答案。</p></div><div class="explore-status"><span class="trace-live"><i></i>用户自主选择</span><strong id="selectedAgentName">现象探索者</strong></div></div>
+            <div class="agent-selection-grid">
+              <button class="agent-choice active" data-agent="phenomenology"><span class="agent-choice-icon">◌</span><strong>现象探索者</strong><small>从当下经验与可观察事实开始</small><em>推荐起始视角</em></button>
+              <button class="agent-choice" data-agent="cognitive"><span class="agent-choice-icon">⌁</span><strong>认知观察者</strong><small>看想法、解释和重复判断</small><em>适合思维卡住时</em></button>
+              <button class="agent-choice" data-agent="narrative"><span class="agent-choice-icon">▤</span><strong>叙事整理者</strong><small>看故事如何组织经验与身份</small><em>适合长期复盘</em></button>
+              <button class="agent-choice" data-agent="systemic"><span class="agent-choice-icon">⌘</span><strong>系统观察者</strong><small>看关系、位置和反复出现的互动</small><em>适合关系问题</em></button>
+              <button class="agent-choice" data-agent="attachment"><span class="agent-choice-icon">◈</span><strong>依恋观察者</strong><small>看靠近、回避与期待的线索</small><em>工作视角，不是标签</em></button>
+              <button class="agent-choice" data-agent="strength"><span class="agent-choice-icon">✦</span><strong>优势探索者</strong><small>看资源、意义和已经做到的事</small><em>适合行动设计</em></button>
+            </div>
+            <div class="explore-detail-layout"><div class="panel explore-preview"><div class="card-kicker">当前工作视角</div><div class="preview-heading"><div class="preview-agent-icon" id="previewAgentIcon">◌</div><div><h2 id="previewAgentTitle">现象探索者</h2><p id="previewAgentDescription">先把事情说清楚，再决定要不要解释它。</p></div></div><div class="question-chain"><span>事实</span><b>→</b><span>体验</span><b>→</b><span>模式</span><b>→</b><span>验证</span></div><div class="grounding-note"><span>!</span><p>本项目不把模型生成的理论当作事实。任何理论都需要经过资料学习、来源追踪和实际案例验证后，才能进入正式知识模块。</p></div><button class="primary-button" id="useAgentButton">用这个视角开始对话 <span>→</span></button></div><aside class="panel explore-principles"><div class="card-kicker">设计纪律</div><h3>先从现实出发</h3><div class="principle-row"><span>01</span><p>先记录发生了什么，不急着给它命名。</p></div><div class="principle-row"><span>02</span><p>把事实、体验、假设和建议分开。</p></div><div class="principle-row"><span>03</span><p>允许不同 Agent 给出不同观察角度。</p></div><div class="principle-row"><span>04</span><p>结论必须能回到具体经历和可验证问题。</p></div><button class="outline-button full" data-view-target="architecture">查看多智能体架构 <span>→</span></button></aside></div>
           </section>
 
           <!-- Clues -->
@@ -224,7 +240,7 @@
 
           <!-- Memory -->
           <section class="view" data-view-panel="memory">
-            <div class="page-heading"><div><div class="eyebrow">记忆智能体</div><h1>由你决定，什么值得被记住</h1><p>澄心只保存经过你确认、对后续支持有帮助的内容。</p></div><button class="primary-button" id="newMemory"><span>＋</span>新增记忆</button></div>
+            <div class="page-heading"><div><div class="eyebrow">记忆智能体</div><h1>由你决定，什么值得被记住</h1><p>Zhiyin 只保存经过你确认、对后续探索有帮助的内容。</p></div><button class="primary-button" id="newMemory"><span>＋</span>新增记忆</button></div>
             <div class="memory-banner"><div class="banner-icon">◈</div><div><strong>你的记忆，你做主</strong><p>点击任意记忆可以查看来源、授权状态和删除选项。敏感内容默认不会自动保存。</p></div><span class="banner-lock">隐私优先</span></div>
             <div class="memory-toolbar"><div class="filter-pills"><button class="active">全部记忆</button><button>目标与偏好</button><button>事件记录</button><button>风险提醒</button></div><span class="muted">共 5 条 · 最近更新 2 小时前</span></div>
             <div class="memory-grid"><article class="memory-card"><div class="memory-card-top"><span class="tag tag-purple">长期目标</span><button class="icon-button">•••</button></div><h3>改善睡眠质量</h3><p>希望建立更稳定的作息，减少睡前反复思考。</p><div class="memory-source"><span>✦</span> 用户主动确认 · 2 小时前</div><div class="memory-card-footer"><span class="saved-status">已保存</span><button class="small-action" data-memory-action="edit">编辑</button></div></article><article class="memory-card"><div class="memory-card-top"><span class="tag tag-peach">沟通偏好</span><button class="icon-button">•••</button></div><h3>先听见，再建议</h3><p>希望回答先复述感受，再提供一个小而具体的行动。</p><div class="memory-source"><span>✦</span> 系统从明确选择中整理 · 昨天</div><div class="memory-card-footer"><span class="saved-status">已保存</span><button class="small-action" data-memory-action="edit">编辑</button></div></article><article class="memory-card"><div class="memory-card-top"><span class="tag tag-mint">可用资源</span><button class="icon-button">•••</button></div><h3>散步与记录</h3><p>散步、写下来和明确表达需求，曾经帮助自己回到当下。</p><div class="memory-source"><span>✦</span> 用户在对话中确认 · 9月22日</div><div class="memory-card-footer"><span class="saved-status">已保存</span><button class="small-action" data-memory-action="edit">编辑</button></div></article><article class="memory-card add-memory-card" id="addMemoryCard"><div class="add-circle">＋</div><h3>添加一条重要记忆</h3><p>只保存你明确希望系统记住的内容。</p></article></div>
@@ -238,17 +254,18 @@
             <div class="goal-list"><article class="goal-list-card"><div class="goal-symbol purple">☾</div><div class="goal-list-content"><div class="goal-list-title"><h3>改善睡眠质量</h3><span class="tag tag-purple">进行中</span></div><p>建立稳定作息，减少睡前反复思考。</p><div class="progress-track"><span style="width:68%"></span></div><div class="progress-meta"><span>第 2 周 / 4 周</span><strong>68%</strong></div></div><button class="round-arrow">↗</button></article><article class="goal-list-card"><div class="goal-symbol peach">◌</div><div class="goal-list-content"><div class="goal-list-title"><h3>更清楚地表达需求</h3><span class="tag tag-peach">进行中</span></div><p>在重要关系中练习表达，而不是默默承受。</p><div class="progress-track peach-track"><span style="width:42%"></span></div><div class="progress-meta"><span>第 1 周 / 4 周</span><strong>42%</strong></div></div><button class="round-arrow">↗</button></article><article class="goal-list-card"><div class="goal-symbol mint">▤</div><div class="goal-list-content"><div class="goal-list-title"><h3>建立情绪记录习惯</h3><span class="tag tag-mint">进行中</span></div><p>每天用几句话记录当下的感受和需要。</p><div class="progress-track mint-track"><span style="width:85%"></span></div><div class="progress-meta"><span>第 3 周 / 4 周</span><strong>85%</strong></div></div><button class="round-arrow">↗</button></article></div>
           </section>
 
-          <!-- Supervision -->
-          <section class="view" data-view-panel="supervision">
-            <div class="page-heading"><div><div class="eyebrow">教师工作台 · 演示视图</div><h1>专业监督与人工接管</h1><p>教师可以查看经过授权的关键线索、风险状态和分析依据，并在必要时介入。</p></div><div class="teacher-badge">● 专业模式</div></div>
-            <div class="teacher-stats"><div><strong>3</strong><span>待审阅案例</span></div><div><strong>1</strong><span>需要关注的风险</span></div><div><strong>92%</strong><span>本周建议完成率</span></div><div><strong>14:32</strong><span>平均响应时间</span></div></div>
-            <div class="teacher-layout"><div class="panel case-table-panel"><div class="panel-heading"><div><div class="card-kicker">案例队列</div><h2>最近需要关注</h2></div><button class="outline-button">筛选</button></div><div class="case-table"><div class="case-table-head"><span>来访者</span><span>当前主题</span><span>风险</span><span>最后更新</span><span></span></div><button class="case-row selected"><span class="case-user"><i class="avatar avatar-blue">林</i><strong>林同学</strong></span><span>睡眠与工作压力</span><span class="risk-level medium">需关注</span><span>今天 09:42</span><b>›</b></button><button class="case-row"><span class="case-user"><i class="avatar avatar-peach">周</i><strong>周同学</strong></span><span>关系冲突与边界</span><span class="risk-level low">低风险</span><span>昨天 18:20</span><b>›</b></button><button class="case-row"><span class="case-user"><i class="avatar avatar-mint">陈</i><strong>陈同学</strong></span><span>考试压力</span><span class="risk-level high">高风险</span><span>9月22日 22:03</span><b>›</b></button></div></div><aside class="panel case-detail-panel"><div class="case-detail-head"><div class="avatar avatar-blue large">林</div><div><div class="card-kicker">案例摘要 · 脱敏</div><h2>林同学</h2><span>睡眠与工作压力 · 本周第 2 周</span></div><span class="risk-level medium">需关注</span></div><div class="detail-section"><div class="detail-label">关键事实</div><p>连续三天反馈入睡困难，工作繁忙时思维活动增加。</p></div><div class="detail-section"><div class="detail-label">系统工作假设</div><div class="hypothesis"><span>1</span><p>工作压力可能是睡眠困难的近期影响因素之一，仍需继续观察。</p></div></div><div class="detail-section"><div class="detail-label">建议人工确认</div><ul class="review-list"><li>是否影响白天功能</li><li>是否存在身体疾病或用药因素</li><li>是否需要专业医疗评估</li></ul></div><div class="detail-actions"><button class="outline-button">查看完整记录</button><button class="primary-button">接手跟进 <span>→</span></button></div></aside></div>
+          <!-- Architecture -->
+          <section class="view" data-view-panel="architecture">
+            <div class="page-heading"><div><div class="eyebrow">Architecture · 设计给开源与评审</div><h1>让多个小 Agent 协同，而不是堆一个巨 Agent</h1><p>Zhiyin 的核心不是“把所有心理知识塞进模型”，而是让不同模块在合适的时间拿到合适的上下文。</p></div><div class="architecture-badge">● 开放实验架构</div></div>
+            <div class="architecture-flow-grid"><div class="architecture-module main-module"><span class="module-index">01</span><div class="module-orb purple">✦</div><h3>总控智能体</h3><p>理解用户此刻想做什么，先判断风险，再决定本轮需要谁参与。</p><span class="module-role">唯一编排者</span></div><div class="architecture-connector">按需调用<br><b>→</b></div><div class="architecture-module"><span class="module-index">02</span><div class="module-orb peach">◈</div><h3>记忆智能体</h3><p>只取相关偏好、目标和已授权事实，避免把整段历史塞进每个模块。</p><span class="module-role">最小必要上下文</span></div><div class="architecture-module"><span class="module-index">03</span><div class="module-orb mint">⌁</div><h3>线索智能体</h3><p>记录事件、体验、模式和矛盾，把零散表达整理成可继续验证的线索。</p><span class="module-role">事实与假设分层</span></div><div class="architecture-module"><span class="module-index">04</span><div class="module-orb blue">⌘</div><h3>视角智能体</h3><p>根据用户选择的工作视角，组织问题，而不是预设唯一正确的理论。</p><span class="module-role">可切换观察框架</span></div><div class="architecture-module"><span class="module-index">05</span><div class="module-orb red">✓</div><h3>输出审查</h3><p>检查风险、事实、隐私和表达边界，最终只把自然回复交给用户。</p><span class="module-role">最后的守门人</span></div></div>
+            <div class="architecture-bottom"><div class="panel architecture-discipline"><div class="card-kicker">现实优先</div><h2>不允许模型凭空建立理论</h2><p>模型可以帮助整理、比较和提出问题，但不能因为语言流畅就把生成内容当成理论依据。</p><div class="discipline-grid"><div><strong>事实</strong><span>用户明确说过，或有可追踪来源</span></div><div><strong>工作假设</strong><span>从事实出发的暂时解释</span></div><div><strong>理论引用</strong><span>必须经过资料学习与来源验证</span></div></div></div><div class="panel architecture-context"><div class="card-kicker">上下文策略</div><h2>节约上下文，而不是缩短理解</h2><div class="context-line"><span>1</span><p>总控先读取当前输入和会话状态。</p></div><div class="context-line"><span>2</span><p>只向相关 Agent 传递必要事实和线索。</p></div><div class="context-line"><span>3</span><p>输出审查只检查本次回答的依据和风险。</p></div><div class="context-budget"><span>本轮上下文占用</span><strong>轻量模式 · 按需扩展</strong><i><b style="width: 34%"></b></i></div></div></div>
           </section>
 
           <!-- Settings -->
+
           <section class="view" data-view-panel="settings">
             <div class="page-heading"><div><div class="eyebrow">系统设置</div><h1>让工具更适合你</h1><p>这里只提供必要选项，所有设置都可以随时调整。</p></div></div>
-            <div class="settings-grid"><div class="panel settings-panel"><div class="card-kicker">对话偏好</div><h2>交流方式</h2><label class="setting-row"><span><strong>先复述再建议</strong><small>先确认你的感受，再给出建议</small></span><input type="checkbox" class="toggle" checked /></label><label class="setting-row"><span><strong>每日状态提醒</strong><small>每天 21:00 提醒我记录</small></span><input type="checkbox" class="toggle" checked /></label><label class="setting-row"><span><strong>减少通知</strong><small>只在重要节点提醒我</small></span><input type="checkbox" class="toggle" /></label></div><div class="panel settings-panel"><div class="card-kicker">数据与隐私</div><h2>记忆与授权</h2><label class="setting-row"><span><strong>自动提取对话线索</strong><small>只提取到本次会话，不自动写入长期记忆</small></span><input type="checkbox" class="toggle" checked /></label><label class="setting-row"><span><strong>允许教师查看</strong><small>仅在你主动预约或授权时开放</small></span><input type="checkbox" class="toggle" checked /></label><button class="outline-button full" id="exportData">导出我的数据 <span>→</span></button></div></div>
+            <div class="settings-grid"><div class="panel settings-panel"><div class="card-kicker">对话偏好</div><h2>交流方式</h2><label class="setting-row"><span><strong>先复述再建议</strong><small>先确认你的感受，再给出建议</small></span><input type="checkbox" class="toggle" checked /></label><label class="setting-row"><span><strong>每日状态提醒</strong><small>每天 21:00 提醒我记录</small></span><input type="checkbox" class="toggle" checked /></label><label class="setting-row"><span><strong>减少通知</strong><small>只在重要节点提醒我</small></span><input type="checkbox" class="toggle" /></label></div><div class="panel settings-panel"><div class="card-kicker">数据与隐私</div><h2>记忆与授权</h2><label class="setting-row"><span><strong>自动提取对话线索</strong><small>只提取到本次会话，不自动写入长期记忆</small></span><input type="checkbox" class="toggle" checked /></label><label class="setting-row"><span><strong>允许架构实验记录</strong><small>只保留你主动导出的本地演示数据</small></span><input type="checkbox" class="toggle" checked /></label><button class="outline-button full" id="exportData">导出我的数据 <span>→</span></button></div></div>
           </section>
         </div>
       </main>

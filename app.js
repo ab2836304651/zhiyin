@@ -1,8 +1,9 @@
 const storageKeys = {
-  memories: 'chengxin-memories',
-  messages: 'chengxin-messages',
-  clues: 'chengxin-clues',
-  mood: 'chengxin-mood'
+  memories: 'zhiyin-memories',
+  messages: 'zhiyin-messages',
+  clues: 'zhiyin-clues',
+  mood: 'zhiyin-mood',
+  agent: 'zhiyin-agent'
 };
 
 const state = {
@@ -16,19 +17,31 @@ const state = {
   ],
   clues: 12,
   modalMode: 'memory',
-  lastTrace: null
+  lastTrace: null,
+  selectedAgent: 'phenomenology'
 };
 
 const $ = (selector, root = document) => root.querySelector(selector);
 const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
+
+const agentProfiles = {
+  phenomenology: { name: '现象探索者', icon: '◌', description: '先把事情说清楚，再决定要不要解释它。', prompt: '我想先从最近发生的事情开始，先记录事实，不急着给自己下结论。' },
+  cognitive: { name: '认知观察者', icon: '⌁', description: '观察想法、解释和重复判断如何影响体验。', prompt: '我想观察最近反复出现的想法和判断，但不急着否定它们。' },
+  narrative: { name: '叙事整理者', icon: '▤', description: '看看一个故事如何组织经验、身份和可能性。', prompt: '我想把这段时间的经历整理成一个故事，看看我是怎样理解自己的。' },
+  systemic: { name: '系统观察者', icon: '⌘', description: '看关系、位置和反复出现的互动模式。', prompt: '我想从关系和互动模式看一件反复发生的事。' },
+  attachment: { name: '依恋观察者', icon: '◈', description: '探索靠近、回避、期待和关系安全感的线索。', prompt: '我想探索自己在关系中靠近、回避和期待的方式。' },
+  strength: { name: '优势探索者', icon: '✦', description: '不只看待问题，也寻找已经存在的资源和行动能力。', prompt: '我想看看自己已经拥有的资源和已经做到的事情。' }
+};
 
 function loadState() {
   try {
     state.messages = JSON.parse(localStorage.getItem(storageKeys.messages) || '[]');
     const memories = JSON.parse(localStorage.getItem(storageKeys.memories) || 'null');
     const clues = JSON.parse(localStorage.getItem(storageKeys.clues) || 'null');
+    const agent = localStorage.getItem(storageKeys.agent);
     if (Array.isArray(memories) && memories.length) state.memories = memories;
     if (Number.isFinite(clues)) state.clues = clues;
+    if (agent && agentProfiles[agent]) state.selectedAgent = agent;
   } catch (error) {
     console.warn('本地演示数据读取失败', error);
   }
@@ -47,7 +60,7 @@ function showToast(message) {
 }
 
 function switchView(view) {
-  const names = { home: '今日概览', chat: '对话空间', clues: '线索图谱', memory: '记忆中心', goals: '成长目标', supervision: '教师督导', settings: '系统设置' };
+  const names = { home: '今日概览', chat: '对话空间', explore: '流派探索', clues: '线索图谱', memory: '记忆中心', goals: '成长目标', architecture: '架构总览', settings: '系统设置' };
   state.currentView = view;
   $$('.view').forEach((panel) => panel.classList.toggle('active', panel.dataset.viewPanel === view));
   $$('.nav-item').forEach((item) => item.classList.toggle('active', item.dataset.view === view));
@@ -81,11 +94,11 @@ function renderMessages() {
     if (message.role === 'assistant' && message.crisis) {
       body.insertAdjacentHTML('beforeend', '<div class="crisis-card"><strong>需要先确认你的安全</strong><p>我很重视你刚才说的话。此刻请先把自己放在安全的地方，远离可能伤害自己的物品，并联系一位你信任的人陪着你。如果你可能马上行动或已经受伤，请立即联系当地急救服务或前往最近的急诊。</p><a class="crisis-link" href="https://www.who.int/health-topics/suicide" target="_blank" rel="noreferrer">查看国际危机支持资源 ↗</a></div>');
     }
-    const avatar = message.role === 'user' ? '林' : '随';
+    const avatar = message.role === 'user' ? '林' : '知';
     const content = escapeHtml(message.content).replace(/\n/g, '<br>');
     const actions = message.role === 'assistant' ? '<div class="message-actions"><button class="message-action" data-action="remember-message">◈ 记住这条</button><button class="message-action" data-action="copy-message">复制</button></div>' : '';
     const trace = message.trace?.length ? `<div class="message-trace"><span>本轮协作</span>${message.trace.map((item) => `<i>${escapeHtml(item)}</i>`).join('<b>›</b>')}</div>` : '';
-    body.insertAdjacentHTML('beforeend', `<div class="message ${message.role}"><div class="message-avatar ${message.role === 'user' ? 'avatar-blue' : 'avatar-agent'}">${avatar}</div><div class="message-content"><p>${content}</p>${trace}${actions}<div class="message-meta">${message.role === 'user' ? '你 · ' + (message.time || '刚刚') : '随行心理师 · 已接收 · 不自动写入长期记忆'}</div></div></div>`);
+    body.insertAdjacentHTML('beforeend', `<div class="message ${message.role}"><div class="message-avatar ${message.role === 'user' ? 'avatar-blue' : 'avatar-agent'}">${avatar}</div><div class="message-content"><p>${content}</p>${trace}${actions}<div class="message-meta">${message.role === 'user' ? '你 · ' + (message.time || '刚刚') : 'Zhiyin · 已接收 · 不自动写入长期记忆'}</div></div></div>`);
   });
   body.scrollTop = body.scrollHeight;
 }
@@ -100,6 +113,19 @@ function updateAgentTrace(trace, crisis = false) {
   const bar = $('.context-bar i');
   if (meter) meter.textContent = crisis ? '安全优先' : '轻量模式';
   if (bar) bar.style.width = crisis ? '82%' : `${Math.min(74, 26 + trace.length * 7)}%`;
+}
+
+function selectAgent(key, silent = false) {
+  const profile = agentProfiles[key];
+  if (!profile) return;
+  state.selectedAgent = key;
+  localStorage.setItem(storageKeys.agent, key);
+  $$('.agent-choice').forEach((choice) => choice.classList.toggle('active', choice.dataset.agent === key));
+  $('#selectedAgentName').textContent = profile.name;
+  $('#previewAgentIcon').textContent = profile.icon;
+  $('#previewAgentTitle').textContent = profile.name;
+  $('#previewAgentDescription').textContent = profile.description;
+  if (!silent) showToast(`已切换到：${profile.name}`);
 }
 
 function addMessage(role, content, extra = {}) {
@@ -118,7 +144,9 @@ const agentRoutes = {
   default: ['意图识别', '回应生成', '监督审查']
 };
 function getAgentRoute(topic, crisis) {
-  return crisis ? agentRoutes.crisis : (agentRoutes[topic] || agentRoutes.default);
+  if (crisis) return agentRoutes.crisis;
+  const selected = agentProfiles[state.selectedAgent]?.name || '工作视角';
+  return [selected, ...(agentRoutes[topic] || agentRoutes.default)];
 }
 const normalResponses = {
   sleep: '我先听见你最近很难让大脑安静下来。这里有一个工作假设：工作压力可能让思维停不下来，但我们还需要继续确认。先做一个很小的事情：今晚把最占脑力的一件具体事情写在纸上，给它一个明确的结束位置。你愿意告诉我，这种“停不下来”更常发生在什么时候吗？',
@@ -208,9 +236,16 @@ function bindEvents() {
     $$('.role-button').forEach((item) => item.classList.remove('active'));
     button.classList.add('active');
     state.role = button.dataset.role;
-    if (state.role === 'teacher') { switchView('supervision'); showToast('已切换到教师端演示视图'); }
-    else { switchView('home'); showToast('已切换到用户端演示视图'); }
+    if (state.role === 'architecture') { switchView('architecture'); showToast('已切换到架构总览'); }
+    else { switchView('home'); showToast('已切换到使用端'); }
   }));
+  $$('.agent-choice').forEach((choice) => choice.addEventListener('click', () => selectAgent(choice.dataset.agent)));
+  $('#useAgentButton').addEventListener('click', () => {
+    const profile = agentProfiles[state.selectedAgent];
+    switchView('chat');
+    $('#messageInput').value = profile.prompt;
+    showToast(`已带入：${profile.name}`);
+  });
   $$('.mood-option').forEach((option) => option.addEventListener('click', () => {
     $$('.mood-option').forEach((item) => item.classList.remove('selected'));
     option.classList.add('selected');
@@ -247,10 +282,9 @@ function bindEvents() {
       else showToast('当前浏览器暂不支持自动复制');
     }
   });
-  $('#exportData').addEventListener('click', () => { const data = { exportedAt: new Date().toISOString(), memories: state.memories, messages: state.messages, clues: state.clues }; const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' }); const link = document.createElement('a'); link.href = URL.createObjectURL(blob); link.download = 'chengxin-demo-data.json'; link.click(); URL.revokeObjectURL(link.href); showToast('演示数据已导出'); });
+  $('#exportData').addEventListener('click', () => { const data = { exportedAt: new Date().toISOString(), memories: state.memories, messages: state.messages, clues: state.clues }; const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' }); const link = document.createElement('a'); link.href = URL.createObjectURL(blob); link.download = 'zhiyin-demo-data.json'; link.click(); URL.revokeObjectURL(link.href); showToast('演示数据已导出'); });
   $('#completeAction').addEventListener('click', (event) => { event.currentTarget.innerHTML = '已完成 ✓'; event.currentTarget.disabled = true; showToast('小行动完成，做得很好'); });
   $('#saveQuestions').addEventListener('click', () => showToast('已保存为个人探索问题'));
-  $$('.case-row').forEach((row) => row.addEventListener('click', () => { $$('.case-row').forEach((item) => item.classList.remove('selected')); row.classList.add('selected'); }));
 }
 
 function init() {
@@ -261,6 +295,7 @@ function init() {
   const lastAssistant = [...state.messages].reverse().find((message) => message.role === 'assistant');
   if (lastAssistant?.trace) updateAgentTrace(lastAssistant.trace, lastAssistant.crisis);
   renderMemoryCards();
+  selectAgent(state.selectedAgent, true);
   bindEvents();
   const count = $('.summary-card strong');
   if (count) count.textContent = String(state.clues);
