@@ -1,0 +1,10 @@
+{
+  "name": "chengxin-psych-agent",
+  "version": "0.1.0",
+  "private": true,
+  "description": "心理支持智能体架构评审原型",
+  "scripts": {
+    "start": "python -m http.server 4173",
+    "dev": "python -m http.server 4173"
+  }
+}
