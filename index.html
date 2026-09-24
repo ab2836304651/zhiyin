@@ -40,9 +40,6 @@
 
         <div class="sidebar-label sidebar-label-spaced">实验空间</div>
         <nav class="main-nav">
-          <button class="nav-item" data-view="explore">
-            <span class="nav-icon">⌘</span><span>流派探索</span>
-          </button>
           <button class="nav-item" data-view="architecture">
             <span class="nav-icon">▣</span><span>架构总览</span>
           </button>
@@ -127,17 +124,17 @@
                 <div class="architecture-strip">
                   <div class="architecture-intro">
                     <div class="card-kicker">设计理念 · 轻量级编排</div>
-                    <h2>随时可用，但不让一个智能体包办所有事</h2>
-                    <p>总控只保留必要上下文，把不同任务交给最合适的智能体；用户看到的始终是一段连续、自然的对话。</p>
+                    <h2>随时可用，但不给 Agent 套上太多框架</h2>
+                    <p>先倾听，再由记忆和探索发现 Agent 从具体经历中整理线索；用户始终是自己经验的专家。</p>
                   </div>
                   <div class="agent-flow" aria-label="多智能体协作流程">
-                    <div class="flow-node main"><span class="flow-orb">✦</span><strong>总控</strong><small>理解意图</small></div>
+                    <div class="flow-node main"><span class="flow-orb">✦</span><strong>倾听</strong><small>承接现场</small></div>
                     <i>→</i>
-                    <div class="flow-node"><span class="flow-orb purple">◈</span><strong>记忆</strong><small>按需取用</small></div>
+                    <div class="flow-node"><span class="flow-orb purple">◈</span><strong>记忆</strong><small>内隐整理</small></div>
                     <i>→</i>
-                    <div class="flow-node"><span class="flow-orb peach">⌁</span><strong>线索</strong><small>更新模式</small></div>
+                    <div class="flow-node"><span class="flow-orb peach">⌁</span><strong>发现</strong><small>探索线索</small></div>
                     <i>→</i>
-                    <div class="flow-node"><span class="flow-orb mint">✓</span><strong>审查</strong><small>安全输出</small></div>
+                    <div class="flow-node"><span class="flow-orb mint">✓</span><strong>边界</strong><small>谨慎输出</small></div>
                   </div>
                   <div class="advantage-row"><span><b>∞</b> 更稳定的耐心</span><span><b>↗</b> 更细致的模式推理</span><span><b>◷</b> 随时随地可用</span><span class="context-saving">上下文按模块隔离</span></div>
                 </div>
@@ -186,7 +183,7 @@
                   <button class="text-button full text-left" data-view-target="chat">和我聊聊这个变化 <span>→</span></button>
                 </div>
                 <div class="side-card support-card">
-                  <div class="support-avatar">知</div><div><div class="card-kicker">开放实验</div><strong>选择一个工作视角</strong><p>从现实经历开始，而不是从理论标签开始</p></div><button class="round-arrow light" data-view-target="explore">↗</button>
+                  <div class="support-avatar">知</div><div><div class="card-kicker">开放实验</div><strong>让系统从你的经历中学习</strong><p>不预设流派，让 Agent 自己发现线索</p></div><button class="round-arrow light" data-view-target="architecture">↗</button>
                 </div>
               </aside>
             </div>
@@ -210,25 +207,11 @@
               </div>
               <aside class="chat-side">
                 <div class="chat-side-card active-case"><div class="card-kicker">当前探索</div><h3>改善睡眠质量</h3><p>最近 7 天 · 4 条相关记录</p><div class="case-progress"><span style="width:68%"></span></div><div class="progress-meta"><span>进展 68%</span><button class="link-button">详情 <span>→</span></button></div></div>
-                <div class="chat-side-card agent-trace-card" id="agentTraceCard"><div class="side-card-header"><div><div class="card-kicker">本轮协作</div><h3 id="agentTraceTitle">等待你的第一句话</h3></div><span class="trace-live"><i></i>按需调用</span></div><div class="agent-chain" id="agentChain"><span>意图识别</span><b>→</b><span>安全筛查</span><b>→</b><span>回应生成</span></div><div class="context-meter"><div><span>上下文隔离</span><strong>轻量模式</strong></div><div class="context-bar"><i style="width:28%"></i></div><small>只把与当前问题相关的记忆和线索交给对应模块</small></div></div>
+                <div class="chat-side-card agent-trace-card" id="agentTraceCard"><div class="side-card-header"><div><div class="card-kicker">本轮协作</div><h3 id="agentTraceTitle">等待你的第一句话</h3></div><span class="trace-live"><i></i>按需调用</span></div><div class="agent-chain" id="agentChain"><span>倾听承接</span><b>→</b><span>记忆整理</span><b>→</b><span>探索发现</span><b>→</b><span>边界审查</span></div><div class="context-meter"><div><span>上下文隔离</span><strong>轻量模式</strong></div><div class="context-bar"><i style="width:28%"></i></div><small>只把与当前问题相关的记忆和线索交给对应模块</small></div></div>
                 <div class="chat-side-card"><div class="side-card-header"><div class="card-kicker">对话洞察</div><button class="icon-button">↗</button></div><div class="insight-row"><span class="insight-dot purple"></span><div><strong>压力线索</strong><p>工作忙碌时更容易出现</p></div></div><div class="insight-row"><span class="insight-dot peach"></span><div><strong>可用资源</strong><p>散步、写作、明确表达</p></div></div></div>
                 <div class="chat-side-card subtle"><div class="card-kicker">记忆设置</div><p>本次对话仅用于当前会话。你可以在消息下方选择是否记住重要内容。</p><button class="outline-button full" id="openMemory">管理记忆 <span>→</span></button></div>
               </aside>
             </div>
-          </section>
-
-          <!-- Explore -->
-          <section class="view" data-view-panel="explore">
-            <div class="page-heading"><div><div class="eyebrow">Agent Lab · 工作视角选择</div><h1>先选一种理解方式，再开始探索</h1><p>这些不是完整理论或治疗流派，而是帮助 Agent 组织问题的不同工作视角。你可以随时切换，不把任何一种视角当成唯一答案。</p></div><div class="explore-status"><span class="trace-live"><i></i>用户自主选择</span><strong id="selectedAgentName">现象探索者</strong></div></div>
-            <div class="agent-selection-grid">
-              <button class="agent-choice active" data-agent="phenomenology"><span class="agent-choice-icon">◌</span><strong>现象探索者</strong><small>从当下经验与可观察事实开始</small><em>推荐起始视角</em></button>
-              <button class="agent-choice" data-agent="cognitive"><span class="agent-choice-icon">⌁</span><strong>认知观察者</strong><small>看想法、解释和重复判断</small><em>适合思维卡住时</em></button>
-              <button class="agent-choice" data-agent="narrative"><span class="agent-choice-icon">▤</span><strong>叙事整理者</strong><small>看故事如何组织经验与身份</small><em>适合长期复盘</em></button>
-              <button class="agent-choice" data-agent="systemic"><span class="agent-choice-icon">⌘</span><strong>系统观察者</strong><small>看关系、位置和反复出现的互动</small><em>适合关系问题</em></button>
-              <button class="agent-choice" data-agent="attachment"><span class="agent-choice-icon">◈</span><strong>依恋观察者</strong><small>看靠近、回避与期待的线索</small><em>工作视角，不是标签</em></button>
-              <button class="agent-choice" data-agent="strength"><span class="agent-choice-icon">✦</span><strong>优势探索者</strong><small>看资源、意义和已经做到的事</small><em>适合行动设计</em></button>
-            </div>
-            <div class="explore-detail-layout"><div class="panel explore-preview"><div class="card-kicker">当前工作视角</div><div class="preview-heading"><div class="preview-agent-icon" id="previewAgentIcon">◌</div><div><h2 id="previewAgentTitle">现象探索者</h2><p id="previewAgentDescription">先把事情说清楚，再决定要不要解释它。</p></div></div><div class="question-chain"><span>事实</span><b>→</b><span>体验</span><b>→</b><span>模式</span><b>→</b><span>验证</span></div><div class="grounding-note"><span>!</span><p>本项目不把模型生成的理论当作事实。任何理论都需要经过资料学习、来源追踪和实际案例验证后，才能进入正式知识模块。</p></div><button class="primary-button" id="useAgentButton">用这个视角开始对话 <span>→</span></button></div><aside class="panel explore-principles"><div class="card-kicker">设计纪律</div><h3>先从现实出发</h3><div class="principle-row"><span>01</span><p>先记录发生了什么，不急着给它命名。</p></div><div class="principle-row"><span>02</span><p>把事实、体验、假设和建议分开。</p></div><div class="principle-row"><span>03</span><p>允许不同 Agent 给出不同观察角度。</p></div><div class="principle-row"><span>04</span><p>结论必须能回到具体经历和可验证问题。</p></div><button class="outline-button full" data-view-target="architecture">查看多智能体架构 <span>→</span></button></aside></div>
           </section>
 
           <!-- Clues -->
@@ -256,12 +239,13 @@
 
           <!-- Architecture -->
           <section class="view" data-view-panel="architecture">
-            <div class="page-heading"><div><div class="eyebrow">Architecture · 设计给开源与评审</div><h1>让多个小 Agent 协同，而不是堆一个巨 Agent</h1><p>Zhiyin 的核心不是“把所有心理知识塞进模型”，而是让不同模块在合适的时间拿到合适的上下文。</p></div><div class="architecture-badge">● 开放实验架构</div></div>
-            <div class="architecture-flow-grid"><div class="architecture-module main-module"><span class="module-index">01</span><div class="module-orb purple">✦</div><h3>总控智能体</h3><p>理解用户此刻想做什么，先判断风险，再决定本轮需要谁参与。</p><span class="module-role">唯一编排者</span></div><div class="architecture-connector">按需调用<br><b>→</b></div><div class="architecture-module"><span class="module-index">02</span><div class="module-orb peach">◈</div><h3>记忆智能体</h3><p>只取相关偏好、目标和已授权事实，避免把整段历史塞进每个模块。</p><span class="module-role">最小必要上下文</span></div><div class="architecture-module"><span class="module-index">03</span><div class="module-orb mint">⌁</div><h3>线索智能体</h3><p>记录事件、体验、模式和矛盾，把零散表达整理成可继续验证的线索。</p><span class="module-role">事实与假设分层</span></div><div class="architecture-module"><span class="module-index">04</span><div class="module-orb blue">⌘</div><h3>视角智能体</h3><p>根据用户选择的工作视角，组织问题，而不是预设唯一正确的理论。</p><span class="module-role">可切换观察框架</span></div><div class="architecture-module"><span class="module-index">05</span><div class="module-orb red">✓</div><h3>输出审查</h3><p>检查风险、事实、隐私和表达边界，最终只把自然回复交给用户。</p><span class="module-role">最后的守门人</span></div></div>
-            <div class="architecture-bottom"><div class="panel architecture-discipline"><div class="card-kicker">现实优先</div><h2>不允许模型凭空建立理论</h2><p>模型可以帮助整理、比较和提出问题，但不能因为语言流畅就把生成内容当成理论依据。</p><div class="discipline-grid"><div><strong>事实</strong><span>用户明确说过，或有可追踪来源</span></div><div><strong>工作假设</strong><span>从事实出发的暂时解释</span></div><div><strong>理论引用</strong><span>必须经过资料学习与来源验证</span></div></div></div><div class="panel architecture-context"><div class="card-kicker">上下文策略</div><h2>节约上下文，而不是缩短理解</h2><div class="context-line"><span>1</span><p>总控先读取当前输入和会话状态。</p></div><div class="context-line"><span>2</span><p>只向相关 Agent 传递必要事实和线索。</p></div><div class="context-line"><span>3</span><p>输出审查只检查本次回答的依据和风险。</p></div><div class="context-budget"><span>本轮上下文占用</span><strong>轻量模式 · 按需扩展</strong><i><b style="width: 34%"></b></i></div></div></div>
+            <div class="page-heading"><div><div class="eyebrow">Architecture · 轻装 Agent 设计</div><h1>不预设心理学体系，让 Agent 在事实里发现路径</h1><p>Zhiyin 不把用户先塞进一套理论，而是让多个 Agent 从真实经历、重复模式和个人语境中逐步理解。</p></div><div class="architecture-badge">● 开放实验架构</div></div>
+            <div class="architecture-flow-grid"><div class="architecture-module main-module"><span class="module-index">01</span><div class="module-orb purple">✦</div><h3>倾听与总控</h3><p>先接住用户原话，理解当下需要什么，不急于分类、诊断或套用理论。</p><span class="module-role">承接现场</span></div><div class="architecture-connector">按需调用<br><b>→</b></div><div class="architecture-module"><span class="module-index">02</span><div class="module-orb peach">◈</div><h3>记忆 Agent</h3><p>在授权范围内整理偏好、经历和重要时刻，让系统逐渐认识这个人。</p><span class="module-role">内隐整理</span></div><div class="architecture-module"><span class="module-index">03</span><div class="module-orb mint">⌁</div><h3>探索发现 Agent</h3><p>从对话中发现现象、想法、情绪、关系、叙事和资源，不要求用户先会命名。</p><span class="module-role">自动发现线索</span></div><div class="architecture-module"><span class="module-index">04</span><div class="module-orb blue">⌘</div><h3>关联推理 Agent</h3><p>跨时间和事件寻找重复模式，保留多种可能性，不急于给出唯一解释。</p><span class="module-role">模式理解</span></div><div class="architecture-module"><span class="module-index">05</span><div class="module-orb red">✓</div><h3>边界审查</h3><p>只检查是否把猜测说成事实、是否越过用户授权、是否需要现实支持。</p><span class="module-role">不替用户下结论</span></div></div>
+            <div class="architecture-bottom"><div class="panel architecture-discipline"><div class="card-kicker">设计取向</div><h2>少一点框架，多一点现场</h2><p>我们暂时不构建一套“心理流派选择器”，避免让预设概念压过用户自己的经验。</p><div class="discipline-grid"><div><strong>先听见</strong><span>先保留原话和现场，不急着命名</span></div><div><strong>再发现</strong><span>让模式从多次经历中自然浮现</span></div><div><strong>后引用</strong><span>需要时再引入有来源的权威资料</span></div></div></div><div class="panel architecture-context"><div class="card-kicker">轻装原则</div><h2>给 Agent 空间，也给用户主体性</h2><div class="context-line"><span>1</span><p>不预设用户属于哪个理论或流派。</p></div><div class="context-line"><span>2</span><p>把用户当作自己经验的专家，Agent 负责帮助整理和追问。</p></div><div class="context-line"><span>3</span><p>记忆是理解线索，不是对人的判决。</p></div><div class="context-budget"><span>当前模式</span><strong>少约束 · 深度理解</strong><i><b style="width: 34%"></b></i></div></div></div>
           </section>
 
           <!-- Settings -->
+
 
           <section class="view" data-view-panel="settings">
             <div class="page-heading"><div><div class="eyebrow">系统设置</div><h1>让工具更适合你</h1><p>这里只提供必要选项，所有设置都可以随时调整。</p></div></div>

@@ -1,8 +1,8 @@
 {
-  "name": "chengxin-psych-agent",
+  "name": "zhiyin",
   "version": "0.1.0",
   "private": true,
-  "description": "心理支持智能体架构评审原型",
+  "description": "Zhiyin：轻装多 Agent 心理探索实验室",
   "scripts": {
     "start": "python -m http.server 4173",
     "dev": "python -m http.server 4173"
