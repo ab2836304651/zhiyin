@@ -228,8 +228,11 @@ function bindEvents() {
   $('#openCheckin').addEventListener('click', () => switchView('chat'));
   $('#openMemory').addEventListener('click', () => switchView('memory'));
   $('#newMemory').addEventListener('click', () => openModal('memory'));
-  $('#addMemoryCard')?.addEventListener('click', () => openModal('memory'));
   $('#addClue').addEventListener('click', () => openModal('clue'));
+  $('.memory-grid').addEventListener('click', (event) => {
+    if (event.target.closest('#addMemoryCard')) openModal('memory');
+    if (event.target.closest('[data-memory-action]')) showToast('正式版本中可编辑、删除或设置记忆有效期');
+  });
   $('#modalClose').addEventListener('click', closeModal);
   $('#modalCancel').addEventListener('click', closeModal);
   $('#modalBackdrop').addEventListener('click', (event) => { if (event.target.id === 'modalBackdrop') closeModal(); });
@@ -238,7 +241,11 @@ function bindEvents() {
   $('#chatBody').addEventListener('click', (event) => {
     const action = event.target.dataset.action;
     if (action === 'remember-message') { state.memories.unshift({ type: '用户主动确认', tone: 'purple', title: '这次对话的重要内容', text: '你希望系统在下一次对话中继续参考这条内容。', source: '从对话中主动选择 · 刚刚' }); persist(storageKeys.memories, state.memories); renderMemoryCards(); showToast('已保存；可在记忆中心随时删除'); }
-    if (action === 'copy-message') { const text = event.target.closest('.message-content').querySelector('p').innerText; navigator.clipboard?.writeText(text).then(() => showToast('已复制')).catch(() => showToast('当前浏览器暂不支持自动复制')); }
+    if (action === 'copy-message') {
+      const text = event.target.closest('.message-content').querySelector('p').innerText;
+      if (navigator.clipboard) navigator.clipboard.writeText(text).then(() => showToast('已复制')).catch(() => showToast('当前浏览器暂不支持自动复制'));
+      else showToast('当前浏览器暂不支持自动复制');
+    }
   });
   $('#exportData').addEventListener('click', () => { const data = { exportedAt: new Date().toISOString(), memories: state.memories, messages: state.messages, clues: state.clues }; const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' }); const link = document.createElement('a'); link.href = URL.createObjectURL(blob); link.download = 'chengxin-demo-data.json'; link.click(); URL.revokeObjectURL(link.href); showToast('演示数据已导出'); });
   $('#completeAction').addEventListener('click', (event) => { event.currentTarget.innerHTML = '已完成 ✓'; event.currentTarget.disabled = true; showToast('小行动完成，做得很好'); });
