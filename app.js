@@ -2,7 +2,8 @@ const storageKeys = {
   memories: 'zhiyin-memories',
   messages: 'zhiyin-messages',
   clues: 'zhiyin-clues',
-  mood: 'zhiyin-mood'
+  mood: 'zhiyin-mood',
+  backgroundReviews: 'zhiyin-background-reviews'
 };
 
 const state = {
@@ -15,8 +16,8 @@ const state = {
     { type: '可用资源', tone: 'mint', title: '散步与记录', text: '散步、写下来和明确表达需求，曾经帮助自己回到当下。', source: '用户在对话中确认 · 9月22日' }
   ],
   clues: 12,
-  modalMode: 'memory',
-  lastTrace: null
+  backgroundReviews: [],
+  modalMode: 'memory'
 };
 
 const $ = (selector, root = document) => root.querySelector(selector);
@@ -29,8 +30,10 @@ function loadState() {
     state.messages = JSON.parse(localStorage.getItem(storageKeys.messages) || '[]');
     const memories = JSON.parse(localStorage.getItem(storageKeys.memories) || 'null');
     const clues = JSON.parse(localStorage.getItem(storageKeys.clues) || 'null');
+    const backgroundReviews = JSON.parse(localStorage.getItem(storageKeys.backgroundReviews) || 'null');
     if (Array.isArray(memories) && memories.length) state.memories = memories;
     if (Number.isFinite(clues)) state.clues = clues;
+    if (Array.isArray(backgroundReviews)) state.backgroundReviews = backgroundReviews;
   } catch (error) {
     console.warn('本地演示数据读取失败', error);
   }
@@ -85,23 +88,9 @@ function renderMessages() {
     }
     const avatar = message.role === 'user' ? '林' : '知';
     const content = escapeHtml(message.content).replace(/\n/g, '<br>');
-    const actions = message.role === 'assistant' ? '<div class="message-actions"><button class="message-action" data-action="remember-message">◈ 记住这条</button><button class="message-action" data-action="copy-message">复制</button></div>' : '';
-    const trace = message.trace?.length ? `<div class="message-trace"><span>本轮协作</span>${message.trace.map((item) => `<i>${escapeHtml(item)}</i>`).join('<b>›</b>')}</div>` : '';
-    body.insertAdjacentHTML('beforeend', `<div class="message ${message.role}"><div class="message-avatar ${message.role === 'user' ? 'avatar-blue' : 'avatar-agent'}">${avatar}</div><div class="message-content"><p>${content}</p>${trace}${actions}<div class="message-meta">${message.role === 'user' ? '你 · ' + (message.time || '刚刚') : 'Zhiyin · 已接收 · 不自动写入长期记忆'}</div></div></div>`);
+    body.insertAdjacentHTML('beforeend', `<div class="message ${message.role}"><div class="message-avatar ${message.role === 'user' ? 'avatar-blue' : 'avatar-agent'}">${avatar}</div><div class="message-content"><p>${content}</p></div></div>`);
   });
   body.scrollTop = body.scrollHeight;
-}
-
-function updateAgentTrace(trace, crisis = false) {
-  const title = $('#agentTraceTitle');
-  const chain = $('#agentChain');
-  if (!title || !chain) return;
-  title.textContent = crisis ? '风险优先：已切换到安全流程' : '按当前问题调用必要模块';
-  chain.innerHTML = trace.map((item) => `<span>${escapeHtml(item)}</span>`).join('<b>→</b>');
-  const meter = $('.context-meter strong');
-  const bar = $('.context-bar i');
-  if (meter) meter.textContent = crisis ? '安全优先' : '轻量模式';
-  if (bar) bar.style.width = crisis ? '82%' : `${Math.min(74, 26 + trace.length * 7)}%`;
 }
 
 function addMessage(role, content, extra = {}) {
@@ -122,6 +111,31 @@ const agentRoutes = {
 function getAgentRoute(topic, crisis) {
   return crisis ? agentRoutes.crisis : (agentRoutes[topic] || agentRoutes.default);
 }
+
+function queueBackgroundReview(topic, crisis, route) {
+  window.setTimeout(() => {
+    const recentCount = state.messages.slice(-8).filter((message) => message.role === 'user').length;
+    const review = {
+      id: `review_${Date.now()}`,
+      createdAt: new Date().toISOString(),
+      status: 'completed',
+      topic,
+      route,
+      evidenceCount: recentCount,
+      observation: crisis ? '安全信号已单独处理' : (topic === 'default' ? '保留当前经验，等待更多语境' : '发现一条候选线索，继续观察')
+    };
+    state.backgroundReviews.unshift(review);
+    state.backgroundReviews = state.backgroundReviews.slice(0, 30);
+    persist(storageKeys.backgroundReviews, state.backgroundReviews);
+    if (!crisis && topic !== 'default') {
+      state.clues += 1;
+      persist(storageKeys.clues, state.clues);
+      const summary = $('.summary-card strong');
+      if (summary) summary.textContent = String(state.clues);
+    }
+  }, 1200);
+}
+
 const normalResponses = {
   sleep: '我先听见你最近很难让大脑安静下来。这里有一个工作假设：工作压力可能让思维停不下来，但我们还需要继续确认。先做一个很小的事情：今晚把最占脑力的一件具体事情写在纸上，给它一个明确的结束位置。你愿意告诉我，这种“停不下来”更常发生在什么时候吗？',
   relationship: '我们可以把这段关系当作一条线索来观察，而不是急着判断谁对谁错。你愿意先说说，最近一次冲突是从哪一个具体时刻开始的吗？我们会一起看：发生了什么、你当时的感受、你通常会怎么回应，以及关系里有没有反复出现的模式。',
@@ -144,19 +158,10 @@ function handleSend(text) {
   addMessage('user', clean);
   const crisis = isCrisis(clean);
   const topic = detectTopic(clean);
-  const trace = getAgentRoute(topic, crisis);
-  state.lastTrace = trace;
-  updateAgentTrace(trace, crisis);
+  const route = getAgentRoute(topic, crisis);
   setTimeout(() => {
-    addMessage('assistant', crisis ? crisisResponse : normalResponses[topic], { crisis, topic, trace });
-    if (!crisis && topic !== 'default') {
-      state.clues += 1;
-      persist(storageKeys.clues, state.clues);
-      const summary = $('.summary-card strong');
-      if (summary) summary.textContent = String(state.clues);
-      showToast('探索发现 Agent 已整理一条线索，尚未写入长期记忆');
-    }
-    if (crisis) showToast('风险流程已触发，请按页面提示联系现实支持者');
+    addMessage('assistant', crisis ? crisisResponse : normalResponses[topic], { crisis, topic });
+    queueBackgroundReview(topic, crisis, route);
   }, 500);
 }
 
@@ -240,16 +245,7 @@ function bindEvents() {
   $('#modalBackdrop').addEventListener('click', (event) => { if (event.target.id === 'modalBackdrop') closeModal(); });
   $('#modalConfirm').addEventListener('click', () => { const content = $('#modalInput').value.trim(); if (!content) { showToast('请先写下内容'); return; } if (state.modalMode === 'memory') addMemory(content); else addClue(content); closeModal(); });
   document.addEventListener('keydown', (event) => { if (event.key === 'Escape') { closeModal(); closeMobileMenu(); } });
-  $('#chatBody').addEventListener('click', (event) => {
-    const action = event.target.dataset.action;
-    if (action === 'remember-message') { state.memories.unshift({ type: '用户主动确认', tone: 'purple', title: '这次对话的重要内容', text: '你希望系统在下一次对话中继续参考这条内容。', source: '从对话中主动选择 · 刚刚' }); persist(storageKeys.memories, state.memories); renderMemoryCards(); showToast('已保存；可在记忆中心随时删除'); }
-    if (action === 'copy-message') {
-      const text = event.target.closest('.message-content').querySelector('p').innerText;
-      if (navigator.clipboard) navigator.clipboard.writeText(text).then(() => showToast('已复制')).catch(() => showToast('当前浏览器暂不支持自动复制'));
-      else showToast('当前浏览器暂不支持自动复制');
-    }
-  });
-  $('#exportData').addEventListener('click', () => { const data = { exportedAt: new Date().toISOString(), memories: state.memories, messages: state.messages, clues: state.clues }; const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' }); const link = document.createElement('a'); link.href = URL.createObjectURL(blob); link.download = 'zhiyin-demo-data.json'; link.click(); URL.revokeObjectURL(link.href); showToast('演示数据已导出'); });
+  $('#exportData').addEventListener('click', () => { const data = { exportedAt: new Date().toISOString(), memories: state.memories, messages: state.messages, backgroundReviews: state.backgroundReviews, clues: state.clues }; const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' }); const link = document.createElement('a'); link.href = URL.createObjectURL(blob); link.download = 'zhiyin-demo-data.json'; link.click(); URL.revokeObjectURL(link.href); showToast('演示数据已导出'); });
   $('#completeAction').addEventListener('click', (event) => { event.currentTarget.innerHTML = '已完成 ✓'; event.currentTarget.disabled = true; showToast('小行动完成，做得很好'); });
   $('#saveQuestions').addEventListener('click', () => showToast('已保存为个人探索问题'));
 }
@@ -259,8 +255,6 @@ function init() {
   const savedMood = localStorage.getItem(storageKeys.mood);
   if (savedMood) { const option = $(`.mood-option[data-mood="${CSS.escape(savedMood)}"]`); if (option) { $$('.mood-option').forEach((item) => item.classList.remove('selected')); option.classList.add('selected'); $('#checkinStatus').textContent = `已选择：${savedMood}`; } }
   renderMessages();
-  const lastAssistant = [...state.messages].reverse().find((message) => message.role === 'assistant');
-  if (lastAssistant?.trace) updateAgentTrace(lastAssistant.trace, lastAssistant.crisis);
   renderMemoryCards();
   bindEvents();
   const count = $('.summary-card strong');
